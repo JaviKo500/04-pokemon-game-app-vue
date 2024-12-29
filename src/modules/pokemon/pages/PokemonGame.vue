@@ -13,7 +13,9 @@
          :pokemon-id="randomPokemon.id" 
          :show-pokemon="gameStatus !== GameStatus.Playing"/>
       <!-- Pokemons options -->
-      <PokemonOptions/>
+      <PokemonOptions 
+         :options="options"
+         @selected-option="onSelectedOption"/>
    </section>
 </template>
 <script lang="ts" setup>
@@ -22,5 +24,6 @@
    import { usePokemonGame } from '@/modules/pokemon/composables/usePokemonGame';
 import { GameStatus } from '../interfaces';
 
-   const { isLoading, randomPokemon, gameStatus } = usePokemonGame();
+   const { isLoading, randomPokemon, gameStatus, pokemonsOptions: options, onSelectedOption } = usePokemonGame();
+
 </script>

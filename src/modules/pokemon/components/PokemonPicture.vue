@@ -24,8 +24,6 @@ import { computed } from 'vue';
    const pokemonImage = computed(()=> 
       `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${props.pokemonId}.svg`
    );
-   console.log('<--------------- JK PokemonPicture --------------->');
-   console.log(props);
 </script>
 
 <style scoped>
