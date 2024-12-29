@@ -37,11 +37,9 @@ export const usePokemonGame = () => {
       pokemons.value = pokemons.value.slice(howMany);
    }
    onMounted(async () => {
-      await sleep(1);
+      await sleep(0.5);
       pokemons.value = await getPokemons();
       getNextOptions();
-      console.log('<--------------- JK UsePokemonGame --------------->');
-      console.log(pokemonsOptions.value);
    });
 
    return {

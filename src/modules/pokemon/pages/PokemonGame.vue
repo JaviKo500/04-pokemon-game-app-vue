@@ -1,5 +1,5 @@
 <template>
-   <section v-if="isLoading"  class="flex flex-col justify-center items-center h-screen">
+   <section v-if="isLoading || !randomPokemon.id"  class="flex flex-col justify-center items-center h-screen">
       <h1 class="text-3xl">awaiting please</h1>
       <h3 class="animate-pulse">Loading pokemons...</h3>
    </section>
@@ -9,15 +9,18 @@
          {{ randomPokemon}}
       </code>
       <!-- Pokemon pictures -->
-      <PokemonPicture/>
+      <PokemonPicture 
+         :pokemon-id="randomPokemon.id" 
+         :show-pokemon="gameStatus !== GameStatus.Playing"/>
       <!-- Pokemons options -->
-       <PokemonOptions/>
+      <PokemonOptions/>
    </section>
 </template>
 <script lang="ts" setup>
    import PokemonPicture from '@/modules/pokemon/components/PokemonPicture.vue'
    import PokemonOptions from '@/modules/pokemon/components/PokemonOptions.vue'
    import { usePokemonGame } from '@/modules/pokemon/composables/usePokemonGame';
+import { GameStatus } from '../interfaces';
 
-   const { isLoading, randomPokemon } = usePokemonGame();
+   const { isLoading, randomPokemon, gameStatus } = usePokemonGame();
 </script>
