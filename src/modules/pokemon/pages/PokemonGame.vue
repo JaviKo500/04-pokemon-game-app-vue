@@ -12,6 +12,9 @@
    </section>
 </template>
 <script lang="ts" setup>
-import PokemonPicture from '@/modules/pokemon/components/PokemonPicture.vue'
-import PokemonOptions from '@/modules/pokemon/components/PokemonOptions.vue'
+   import PokemonPicture from '@/modules/pokemon/components/PokemonPicture.vue'
+   import PokemonOptions from '@/modules/pokemon/components/PokemonOptions.vue'
+   import { usePokemonGame } from '@/modules/pokemon/composables/usePokemonGame';
+
+   const { gameStatus } = usePokemonGame();
 </script>
