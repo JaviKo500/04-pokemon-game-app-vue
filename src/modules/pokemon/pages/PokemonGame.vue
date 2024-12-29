@@ -28,8 +28,8 @@
    </section>
 </template>
 <script lang="ts" setup>
-   import PokemonPicture from '@/modules/pokemon/components/PokemonPicture.vue'
-   import PokemonOptions from '@/modules/pokemon/components/PokemonOptions.vue'
+   import PokemonPicture from '@pokemon/components/PokemonPicture.vue'
+   import PokemonOptions from '@pokemon/components/PokemonOptions.vue'
    import { usePokemonGame } from '@/modules/pokemon/composables/usePokemonGame';
 import { GameStatus } from '../interfaces';
 
