@@ -1,7 +1,7 @@
 import { computed, onMounted, ref } from "vue";
 import { GameStatus, type Pokemon, type PokemonResponse } from '../interfaces';
 import { pokemonApi } from "../api/pokemonApi";
-import { sleep } from "../helpers";
+import { showConfetti, sleep } from "../helpers";
 
 export const usePokemonGame = () => {
 
@@ -36,6 +36,17 @@ export const usePokemonGame = () => {
       pokemonsOptions.value = pokemons.value.slice(0, howMany);
       pokemons.value = pokemons.value.slice(howMany);
    }
+
+   const checkAnswer = (id: number) => {
+      const hasWon = randomPokemon.value.id === id;
+      if (hasWon) {
+         gameStatus.value = GameStatus.Won;
+         showConfetti();
+         return;
+      }
+
+      gameStatus.value = GameStatus.Lost;
+   }
    onMounted(async () => {
       await sleep(0.5);
       pokemons.value = await getPokemons();
@@ -49,5 +60,6 @@ export const usePokemonGame = () => {
       randomPokemon,
       // methods
       getNextOptions,
+      checkAnswer,
    };
 }

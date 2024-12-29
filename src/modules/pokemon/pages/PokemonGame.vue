@@ -6,7 +6,7 @@
    <section v-else class="flex flex-col justify-center items-center h-screen">
       <h1 class="m-4">Who is the pokemon?</h1>
       <code>
-         {{ randomPokemon}}
+         {{ gameStatus}}
       </code>
       <!-- Pokemon pictures -->
       <PokemonPicture 
@@ -15,7 +15,7 @@
       <!-- Pokemons options -->
       <PokemonOptions 
          :options="options"
-         @selected-option="onSelectedOption"/>
+         @selected-option="checkAnswer"/>
    </section>
 </template>
 <script lang="ts" setup>
@@ -24,6 +24,6 @@
    import { usePokemonGame } from '@/modules/pokemon/composables/usePokemonGame';
 import { GameStatus } from '../interfaces';
 
-   const { isLoading, randomPokemon, gameStatus, pokemonsOptions: options, onSelectedOption } = usePokemonGame();
+   const { isLoading, randomPokemon, gameStatus, pokemonsOptions: options, checkAnswer } = usePokemonGame();
 
 </script>
