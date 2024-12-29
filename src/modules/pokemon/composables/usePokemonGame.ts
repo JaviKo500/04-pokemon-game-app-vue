@@ -9,6 +9,12 @@ export const usePokemonGame = () => {
    const pokemons = ref<Pokemon[]>([]);
    const pokemonsOptions = ref<Pokemon[]>([]);
    const isLoading = computed(() => pokemons.value.length === 0);
+   const randomPokemon = computed(
+      () => {
+         const randomIndex = Math.floor(Math.random() * pokemonsOptions.value.length);
+         return pokemonsOptions.value[randomIndex];
+      }
+   );
 
 
    const getPokemons = async (): Promise<Pokemon[]> => {
@@ -42,7 +48,7 @@ export const usePokemonGame = () => {
       gameStatus,
       isLoading,
       pokemonsOptions,
-
+      randomPokemon,
       // methods
       getNextOptions,
    };
