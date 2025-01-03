@@ -22,7 +22,7 @@ describe('UsePokemonGame.test', () => {
       expect(pokemonsOptions.value).toEqual([]);
       expect(randomPokemon.value).toBeUndefined();
 
-      await sleep(2);
+      await sleep(0.5);
       await flushPromises();
 
       expect(isLoading.value).toBe(false);
@@ -35,7 +35,7 @@ describe('UsePokemonGame.test', () => {
 
    test('should correctly handle getNextRound', async () => {
       const [results] = withSetup(usePokemonGame);
-      await sleep(1);
+      await sleep(0.5);
       await flushPromises();
       const { gameStatus, pokemonsOptions } = results;
       results.getNextRound(5);
@@ -45,7 +45,6 @@ describe('UsePokemonGame.test', () => {
 
    test('should correctly handle getNextRound and return different pokemons', async () => {
       const [results] = withSetup(usePokemonGame);
-      await sleep(1);
       await flushPromises();
       const { pokemonsOptions } = results;
 
@@ -60,7 +59,6 @@ describe('UsePokemonGame.test', () => {
 
    test('should correctly handle getNextRound and return different pokemons', async () => {
       const [results] = withSetup(usePokemonGame);
-      await sleep(1);
       await flushPromises();
       const { pokemonsOptions } = results;
 
@@ -71,5 +69,25 @@ describe('UsePokemonGame.test', () => {
       currentPokemonsOptions.forEach((pokemon: Pokemon) => {
          expect(previousPokemonsOptions).not.toContain(pokemon.name);
       });
+   });
+
+   test('should correctly handle a incorrect answer', async () => {
+      const [results] = withSetup(usePokemonGame);
+      await sleep(0.5);
+      await flushPromises();
+      const { checkAnswer, gameStatus } = results;
+      expect(gameStatus.value).toBe(GameStatus.Playing);
+      checkAnswer(100000000);
+      expect(gameStatus.value).toBe(GameStatus.Lost);
+   });
+
+   test('should correctly handle a correct answer', async () => {
+      const [results] = withSetup(usePokemonGame);
+      await sleep(0.5);
+      await flushPromises();
+      const { checkAnswer, gameStatus, randomPokemon } = results;
+      expect(gameStatus.value).toBe(GameStatus.Playing);
+      checkAnswer(randomPokemon.value.id);
+      expect(gameStatus.value).toBe(GameStatus.Won);
    });
 });
