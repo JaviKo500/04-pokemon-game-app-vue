@@ -10,6 +10,7 @@
             class="m-4 rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white" 
             v-if="gameStatus !== GameStatus.Playing"
             @click="getNextRound(4)"
+            data-test-id="button-try-again"
             >
             Try again?
          </button>

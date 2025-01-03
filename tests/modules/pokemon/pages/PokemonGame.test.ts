@@ -59,8 +59,6 @@ describe('PokemonGame.test', () => {
       });
       const wrapper = mount(PokemonGame);
       const imageUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/1.svg'
-      console.log('<--------------- JK PokemonGame.test --------------->');
-      console.log(wrapper.html());
       expect(wrapper.find('img').attributes('src')).toBe(imageUrl);
 
       const buttons = wrapper.findAll('.capitalize.disabled\\:shadow-none.disabled\\:bg-gray-100');
@@ -70,7 +68,43 @@ describe('PokemonGame.test', () => {
       buttons.forEach((button, index) => {
          expect(button.text()).toBe(pokemonsOptions[index].name);
       });
+   });
+
+   test('should render button for trying again', () => {
+      (usePokemonGame as Mock).mockReturnValue({
+         gameStatus: GameStatus.Won,
+         isLoading: false,
+         pokemonsOptions,
+         randomPokemon: pokemonsOptions.at(0),
+         getNextRound: vi.fn(),
+         checkAnswer: vi.fn(),
+      });
+      const wrapper = mount(PokemonGame);
+      const button = wrapper.find('[data-test-id="button-try-again"]');
+
+      expect(button.exists()).toBe(true);
+      expect(button.text()).toBe('Try again?');
+   });
+
+   test('should call the getNextRound function when clicking on the button', async () => {
+      const spyNextRoundFn = vi.fn();
+      (usePokemonGame as Mock).mockReturnValue({
+         gameStatus: GameStatus.Won,
+         isLoading: false,
+         pokemonsOptions,
+         randomPokemon: pokemonsOptions.at(0),
+         getNextRound: spyNextRoundFn,
+         checkAnswer: vi.fn(),
+      });
 
 
+      const wrapper = mount(PokemonGame);
+      const button = wrapper.find('[data-test-id="button-try-again"]');
+
+      await button.trigger('click');
+
+      expect(spyNextRoundFn).toHaveBeenCalled();
+      expect(spyNextRoundFn).toHaveBeenCalledTimes(1);
+      expect(spyNextRoundFn).toHaveBeenCalledWith(4);
    });
 });
