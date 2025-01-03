@@ -1,5 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 import { flushPromises } from '@vue/test-utils';
+import confetti from 'canvas-confetti';
 
 import { usePokemonGame } from '@/modules/pokemon/composables/usePokemonGame';
 import { GameStatus, type Pokemon } from '@/modules/pokemon/interfaces';
@@ -11,6 +12,10 @@ import { fakePokemons } from '../../../data/fake-pokemons';
 
 const mockPokemonApi = new MockAdapter(pokemonApi);
 mockPokemonApi.onGet('/?limit=151').reply(200, fakePokemons);
+
+vi.mock('canvas-confetti', () => ({
+   default: vi.fn(),
+}));
 
 describe('UsePokemonGame.test', () => {
    test('should initialize with correct default values', async () => {
@@ -89,5 +94,11 @@ describe('UsePokemonGame.test', () => {
       expect(gameStatus.value).toBe(GameStatus.Playing);
       checkAnswer(randomPokemon.value.id);
       expect(gameStatus.value).toBe(GameStatus.Won);
+      expect(confetti).toHaveBeenCalled();
+      expect(confetti).toHaveBeenCalledWith({
+         particleCount: 300,
+         spread: 150,
+         origin: { y: 0.6 },
+      });
    });
 });
