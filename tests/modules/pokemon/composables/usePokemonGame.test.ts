@@ -1,8 +1,16 @@
-import { usePokemonGame } from "@/modules/pokemon/composables/usePokemonGame";
-import { withSetup } from "../../../utils/with-setup";
-import { GameStatus } from "@/modules/pokemon/interfaces";
-import { flushPromises } from "@vue/test-utils";
-import { sleep } from "@/modules/pokemon/helpers";
+import MockAdapter from 'axios-mock-adapter';
+import { flushPromises } from '@vue/test-utils';
+
+import { usePokemonGame } from '@/modules/pokemon/composables/usePokemonGame';
+import { GameStatus } from '@/modules/pokemon/interfaces';
+import { sleep } from '@/modules/pokemon/helpers';
+import { pokemonApi } from '@/modules/pokemon/api/pokemonApi';
+
+import { withSetup } from '../../../utils/with-setup';
+import { fakePokemons } from '../../../data/fake-pokemons';
+
+const mockPokemonApi = new MockAdapter(pokemonApi);
+mockPokemonApi.onGet('/?limit=151').reply(200, fakePokemons);
 
 describe('UsePokemonGame.test', () => {
    test('should initialize with correct default values', async () => {
