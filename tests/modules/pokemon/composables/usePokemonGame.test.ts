@@ -2,7 +2,7 @@ import MockAdapter from 'axios-mock-adapter';
 import { flushPromises } from '@vue/test-utils';
 
 import { usePokemonGame } from '@/modules/pokemon/composables/usePokemonGame';
-import { GameStatus } from '@/modules/pokemon/interfaces';
+import { GameStatus, type Pokemon } from '@/modules/pokemon/interfaces';
 import { sleep } from '@/modules/pokemon/helpers';
 import { pokemonApi } from '@/modules/pokemon/api/pokemonApi';
 
@@ -14,7 +14,7 @@ mockPokemonApi.onGet('/?limit=151').reply(200, fakePokemons);
 
 describe('UsePokemonGame.test', () => {
    test('should initialize with correct default values', async () => {
-      const [results, app] = withSetup(usePokemonGame);
+      const [results] = withSetup(usePokemonGame);
       const { gameStatus, isLoading, pokemonsOptions, randomPokemon } = results;
 
       expect(gameStatus.value).toBe(GameStatus.Playing);
@@ -30,6 +30,46 @@ describe('UsePokemonGame.test', () => {
       expect(randomPokemon.value).toEqual({
          id: expect.any(Number),
          name: expect.any(String),
+      });
+   });
+
+   test('should correctly handle getNextRound', async () => {
+      const [results] = withSetup(usePokemonGame);
+      await sleep(1);
+      await flushPromises();
+      const { gameStatus, pokemonsOptions } = results;
+      results.getNextRound(5);
+      expect(gameStatus.value).toBe(GameStatus.Playing);
+      expect(pokemonsOptions.value).toHaveLength(5);
+   });
+
+   test('should correctly handle getNextRound and return different pokemons', async () => {
+      const [results] = withSetup(usePokemonGame);
+      await sleep(1);
+      await flushPromises();
+      const { pokemonsOptions } = results;
+
+      results.getNextRound();
+      const previousPokemonsOptionsIds = pokemonsOptions.value.map((pokemon: Pokemon) => pokemon.id);
+
+      results.getNextRound();
+      const currentPokemonsOptionsIds = pokemonsOptions.value.map((pokemon: Pokemon) => pokemon.id);
+
+      expect(previousPokemonsOptionsIds).not.toContain(currentPokemonsOptionsIds);
+   });
+
+   test('should correctly handle getNextRound and return different pokemons', async () => {
+      const [results] = withSetup(usePokemonGame);
+      await sleep(1);
+      await flushPromises();
+      const { pokemonsOptions } = results;
+
+      const previousPokemonsOptions = [...pokemonsOptions.value.map((pokemon: Pokemon) => pokemon.name)];
+
+      results.getNextRound();
+      const currentPokemonsOptions: Pokemon[] = [...pokemonsOptions.value];
+      currentPokemonsOptions.forEach((pokemon: Pokemon) => {
+         expect(previousPokemonsOptions).not.toContain(pokemon.name);
       });
    });
 });
