@@ -48,9 +48,12 @@ export const usePokemonGame = () => {
       gameStatus.value = GameStatus.Lost;
    }
    onMounted(async () => {
+      console.log('<--------------- JK UsePokemonGame onMounter --------------->');
       await sleep(0.5);
       pokemons.value = await getPokemons();
       getNextRound();
+      console.log(pokemonsOptions.value);
+      console.log('<--------------- JK UsePokemonGame end --------------->');
    });
 
    return {
